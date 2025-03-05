@@ -1,0 +1,35 @@
+Create Venkat import pytest  def mock_function():     return "Executed"  def test_main():     section = "test_section"     valid_sections = {         "tes
+
+
+
+import pytest
+
+# Mock functions
+def datapull_3():
+    return "Datapull executed"
+
+def preprocess_3():
+    return "Preprocessing executed"
+
+def score_3():
+    return "Scoring executed"
+
+# Test function
+def test_main():
+    valid_sections = {
+        "datapull3": datapull_3,
+        "Preprocess3": preprocess_3,
+        "Score3": score_3
+    }
+
+    # Check if the correct function is called
+    assert valid_sections["datapull3"]() == "Datapull executed"
+    assert valid_sections["Preprocess3"]() == "Preprocessing executed"
+    assert valid_sections["Score3"]() == "Scoring executed"
+
+    # Check if `main` correctly executes the function
+    assert main("datapull3", valid_sections, "process") is None  # Since main() doesn't return anything
+
+    # Invalid section test
+    with pytest.raises(ValueError, match="Invalid section: InvalidSection"):
+        main("InvalidSection", valid_sections, "process")
