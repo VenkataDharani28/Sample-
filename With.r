@@ -22,4 +22,3 @@ write_input_df <- function(sg_write, logger, input_df){
   
   logger$log_info("Input written to StorageGrid.")
 }
-
