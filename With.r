@@ -22,3 +22,22 @@ write_input_df <- function(sg_write, logger, input_df){
   
   logger$log_info("Input written to StorageGrid.")
 }
+#' Write files into StorageGrid and cleanup used resources.
+#'
+#' @param file_paths List of file local paths.
+#' @param file_keys List of file keys.
+#' @param data_bucket StorageGrid bucket.
+write_cleanup_outputs <- function(file_paths, file_keys, data_bucket){
+
+  # Write data to StorageGrid using context for better readability
+  with(file_paths, {
+    with(file_keys, {
+      pwaimp::put.file(item = features, file.key = features, domino.or.bucket = data_bucket)
+      pwaimp::put.file(item = scores, file.key = scores, domino.or.bucket = data_bucket)
+      pwaimp::put.file(item = kafka, file.key = kafka, domino.or.bucket = data_bucket)
+    })
+  })
+
+  # Cleanup resources
+  pwaimp::teardown.SG(file_paths$model, file_paths$input)
+}
