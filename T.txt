@@ -1,5 +1,1 @@
-Feature	Classic Studio	Latest SageMaker Studio
-User Management	IAM Roles for each notebook	User Profiles within a SageMaker Domain
-Authentication	IAM only	IAM + AWS Single Sign-On (SSO)
-Storage	Tied to each notebook instance	Shared EFS-based storage across user profiles
-Access Control	Notebook IAM role	User Profile settings (execution role, policies, KMS, etc.)
+
