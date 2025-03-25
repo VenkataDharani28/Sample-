@@ -192,7 +192,47 @@ Workaround: DS must ensure their primary role has the necessary permissions befo
 
 
 
+№#$######%¥
+The difference between dev implementation and model implementation for Streamlit in PCML primarily lies in the stage of the model lifecycle and how Streamlit is used during each phase:
 
+1. Dev Implementation (Development Phase)
+Focuses on Data Scientists (DS) building and testing models within an Enablement Zone (EZ).
+
+Streamlit is used for interactive data exploration, visualization, and UI development during model creation.
+
+DS may need permissions to create Streamlit apps, store assets in stages, and experiment with different model outputs.
+
+Key Permissions:
+
+CREATE STREAMLIT and CREATE STAGE are required.
+
+DS needs access to load data and visualize results in a UI.
+
+Streamlit apps are not yet shared with broader teams or stakeholders.
+
+2. Model Implementation (Deployment & Production Phase)
+Focuses on operationalizing and integrating the model into production workflows.
+
+Streamlit may no longer be used, or its use may be restricted to model monitoring, performance visualization, or business user interaction.
+
+Permissions shift from creation to controlled access (USAGE grants) for consuming the deployed application.
+
+Key Permissions:
+
+DS no longer needs CREATE STREAMLIT; only USAGE permissions are required for the deployed Streamlit app.
+
+DBA team manages periodic grants to ensure appropriate access for stakeholders.
+
+Future grants for Streamlit apps are not supported, requiring manual updates.
+
+Key Differences Summary
+Aspect	Dev Implementation (Development Phase)	Model Implementation (Deployment Phase)
+Who Uses It?	Data Scientists (DS)	Business users, model reviewers, stakeholders
+Purpose	Model development, visualization, experimentation	Model monitoring, business insights
+Key Actions	Create and modify Streamlit apps, test models	Access existing Streamlit apps, review model output
+Permissions	CREATE STREAMLIT, CREATE STAGE, GRANT USAGE	Only USAGE (no CREATE needed)
+Limitations	No future grants on Streamlit objects	Access needs to be managed manually
+Would you like me to refine or expand on any particular area?
 
 
 
