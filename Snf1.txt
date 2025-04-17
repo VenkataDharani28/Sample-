@@ -1,0 +1,134 @@
+Table Creation
+
+Insert Sample Data
+
+ML Function Queries:
+
+FORECAST()
+
+DETECT_ANOMALIES()
+
+IMPUTE_MISSING_VALUES()
+
+CLASSIFY()
+
+ML.FIT() + ML.PREDICT()
+
+
+
+1. Create Table: daily_sales_ml_test
+
+CREATE OR REPLACE TABLE daily_sales_ml_test (
+    sales_date DATE,
+    sales_amount FLOAT,
+    product_category STRING
+);
+
+
+2. Insert Sample Data
+
+INSERT INTO daily_sales_ml_test (sales_date, sales_amount, product_category) VALUES
+('2025-03-01', 1200, 'Electronics'),
+('2025-03-02', 1300, 'Electronics'),
+('2025-03-03', 1280, 'Electronics'),
+('2025-03-04', 1450, 'Electronics'),
+('2025-03-05', NULL, 'Electronics'),
+('2025-03-06', 1600, 'Electronics'),
+('2025-03-07', 1580, 'Electronics'),
+('2025-03-08', 2000, 'Furniture'),
+('2025-03-09', 1900, 'Furniture'),
+('2025-03-10', 2100, 'Furniture'),
+('2025-03-11', NULL, 'Furniture'),
+('2025-03-12', 2050, 'Furniture');
+
+3. ML Function Queries
+A. Forecast Future Sales (7 Days)
+SELECT *
+FROM TABLE(
+    FORECAST(
+        INPUT => (
+            SELECT sales_date, sales_amount
+            FROM daily_sales_ml_test
+            WHERE product_category = 'Electronics'
+        ),
+        TIMESTAMP_COLNAME => 'sales_date',
+        TARGET_COLNAME => 'sales_amount',
+        PREDICT_FOR => 7
+    )
+);
+
+
+B. Detect Anomalies
+
+SELECT *
+FROM TABLE(
+    DETECT_ANOMALIES(
+        INPUT => (
+            SELECT sales_date, sales_amount
+            FROM daily_sales_ml_test
+            WHERE product_category = 'Furniture'
+        ),
+        TIMESTAMP_COLNAME => 'sales_date',
+        TARGET_COLNAME => 'sales_amount'
+    )
+);
+
+C. Impute Missing Values
+
+SELECT *
+FROM TABLE(
+    IMPUTE_MISSING_VALUES(
+        INPUT => (
+            SELECT sales_date, sales_amount
+            FROM daily_sales_ml_test
+        ),
+        TARGET_COLNAME => 'sales_amount'
+    )
+);
+
+
+D. Classify (Basic Example Using Product Category)
+This works best with numeric encoding, so we'll simplify:
+
+SELECT *
+FROM TABLE(
+    CLASSIFY(
+        INPUT => (
+            SELECT sales_amount,
+                   CASE product_category
+                       WHEN 'Electronics' THEN 0
+                       WHEN 'Furniture' THEN 1
+                   END AS category_label
+            FROM daily_sales_ml_test
+            WHERE sales_amount IS NOT NULL
+        ),
+        TARGET_COLNAME => 'category_label'
+    )
+);
+
+E. Train + Predict (Using ML.FIT + ML.PREDICT)
+Step 1: Train model and save
+
+CREATE OR REPLACE SNOWFLAKE.ML.MODEL sales_predict_model
+OPTIONS (MODEL_TYPE = 'REGRESSION') AS
+SELECT sales_amount, 
+       CASE product_category
+           WHEN 'Electronics' THEN 0
+           WHEN 'Furniture' THEN 1
+       END AS category_label
+FROM daily_sales_ml_test
+WHERE sales_amount IS NOT NULL;
+
+Step 2: Predict with model
+
+
+
+SELECT *
+FROM ML.PREDICT(
+    MODEL_NAME => 'sales_predict_model',
+    DATA => (
+        SELECT sales_amount
+        FROM daily_sales_ml_test
+        WHERE sales_amount IS NOT NULL
+    )
+);
