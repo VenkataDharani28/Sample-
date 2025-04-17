@@ -1,0 +1,86 @@
+Snowflake provides a range of Machine Learning (ML) and predictive functions natively within the Snowflake ML and Snowpark ecosystems. These allow you to train models, make predictions, and work with embeddings, among other capabilities, directly inside Snowflake. Here's a categorized list of key Snowflake ML-based functions as of 2025:
+
+
+1. Built-in Predictive Functions
+These are pre-trained models you can use directly:
+
+FORECAST() – Time series forecasting
+
+PREDICT() – General prediction function used after training models with ML.FIT
+
+CLASSIFY() – Classifies input into categories
+
+DETECT_ANOMALIES() – Identifies anomalies in data
+
+IMPUTE_MISSING_VALUES() – Fills in missing data
+
+
+
+2. Snowflake ML Training & Inference Functions
+These support model training and inference within SQL:
+
+ML.FIT() – Trains a model using classification/regression
+
+ML.PREDICT() – Makes predictions using a trained model
+
+ML.SCORE() – Outputs prediction probabilities or raw model outputs
+
+ML.EXPLAIN() – Returns model interpretability info (e.g., feature importance)
+
+
+
+3. Embedding & Text Functions (LLM/GenAI support)
+Snowflake supports functions to work with text and embeddings:
+
+VECTOR_EMBEDDINGS() – Converts text to vector embeddings
+
+VECTOR_DISTANCE() – Computes distance between vectors (e.g., cosine similarity)
+
+VECTOR_COSINE_SIMILARITY() – Specifically computes cosine similarity
+
+VECTOR_DOT_PRODUCT() – Dot product between vectors
+
+VECTOR_L2_NORM() – L2 norm of a vector
+
+
+
+
+4. UDFs and UDTFs (via Snowpark)
+With Snowpark, you can define custom logic using:
+
+Python UDFs/UDTFs – Custom ML logic in Python
+
+Java/Scala UDFs – When using JVM-based ML frameworks (e.g., Spark, H2O)
+
+External Access UDFs – Connect to external model endpoints (e.g., SageMaker)
+
+
+
+
+Here's a simple example using Snowflake’s FORECAST() function to forecast future values based on historical time series data (e.g., daily sales). This assumes your table is already structured with a date column and a numeric target (e.g., sales).
+
+SELECT *
+FROM TABLE(
+    FORECAST(
+        INPUT => (
+            SELECT sales_date, sales_amount
+            FROM daily_sales
+        ),
+        TIMESTAMP_COLNAME => 'sales_date',
+        TARGET_COLNAME => 'sales_amount',
+        PREDICT_FOR => 7  -- Number of future days to forecast
+    )
+);
+
+
+Output Columns:
+SALES_DATE – Future date
+
+FORECASTED_SALES_AMOUNT – Predicted value
+
+PREDICTION_INTERVAL_LOW – Lower bound of confidence interval
+
+PREDICTION_INTERVAL_HIGH – Upper bound
+
+
+
