@@ -1,0 +1,45 @@
+1. Built-in Predictive Functions
+These are pre-trained models you can use directly:
+
+FORECAST() – Time series forecasting
+
+PREDICT() – General prediction function used after training models with ML.FIT
+
+CLASSIFY() – Classifies input into categories
+
+DETECT_ANOMALIES() – Identifies anomalies in data
+
+IMPUTE_MISSING_VALUES() – Fills in missing data
+
+
+
+
+2. Snowflake ML Training & Inference Functions
+These support model training and inference within SQL:
+
+ML.FIT() – Trains a model using classification/regression
+
+ML.PREDICT() – Makes predictions using a trained model
+
+ML.SCORE() – Outputs prediction probabilities or raw model outputs
+
+ML.EXPLAIN() – Returns model interpretability info (e.g., feature importance)
+
+
+SELECT *
+FROM TABLE(
+    FORECAST(
+        INPUT => (
+            SELECT sales_date, sales_amount
+            FROM daily_sales
+        ),
+        TIMESTAMP_COLNAME => 'sales_date',
+        TARGET_COLNAME => 'sales_amount',
+        PREDICT_FOR => 7  -- Number of future days to forecast
+    )
+);
+
+
+
+
+
