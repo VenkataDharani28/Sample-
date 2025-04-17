@@ -1,0 +1,7 @@
+prepare the create table, Insert queries that you might want to use for testing. I will try to create the table in the EZ tomorrow. 
+
+Also create the queries for each of the ML functions based on the data/table you create. 
+
+Basically have the table data to create and all queries ready. We will test it out and finish the documentation. You both will not get access, so no use waiting
+
+Have this prepared and ready. Today evening we will do it over call. Ill create the table and we will manually try out the ML functions inside EZ
